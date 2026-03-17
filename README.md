@@ -59,20 +59,40 @@
 
 ### 对于 Claude Code 用户
 
-将技能文件复制到你的 Claude Code 技能目录：
+#### 方法 1：直接克隆仓库（推荐）
+
+```bash
+# 克隆整个技能目录到 Claude Code 技能目录
+git clone https://github.com/你的用户名/howtocook.git ~/.claude/skills/howtocook
+```
+
+#### 方法 2：手动复制
 
 ```bash
 # 创建技能目录
 mkdir -p ~/.claude/skills/howtocook
 
-# 复制技能文件
-cp SKILL.md ~/.claude/skills/howtocook/
+# 复制整个项目内容（包括 SKILL.md、scripts/、data/、references/）
+cp -r /path/to/howtocook/* ~/.claude/skills/howtocook/
 ```
 
-或直接克隆此仓库：
+### 验证安装
 
-```bash
-git clone https://github.com/你的用户名/howtocook.git ~/.claude/skills/howtocook
+安装完成后，确认以下文件结构：
+
+```
+~/.claude/skills/howtocook/
+├── SKILL.md                    # 主技能文件
+├── README.md                   # 说明文档
+├── scripts/
+│   ├── __init__.py            # Python 包初始化
+│   ├── recipe_parser.py       # 菜谱解析器
+│   ├── recipe_search.py       # 菜谱搜索引擎
+│   └── menu_planner.py        # 菜单规划算法
+├── data/
+│   └── dishes/                # 356+ 个菜谱文件
+└── references/
+    └── recipe_index.json      # 菜谱索引缓存
 ```
 
 然后在 Claude Code 中输入 `/howtocook` 即可使用。

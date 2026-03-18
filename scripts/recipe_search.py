@@ -367,23 +367,32 @@ class RecipeSearcher:
         return [self._index['by_name'][name] for name in results
                 if name in self._index['by_name']]
 
-    def get_recipe(self, recipe_path: str = None, recipe_name: str = None) -> Optional[Dict]:
+    def get_recipe(self, recipe_name: str = None, recipe_path: str = None) -> Optional[Dict]:
         """
         Get full parsed recipe data.
 
         Args:
-            recipe_path: Path to the recipe file
-            recipe_name: Name of the recipe (if path not provided)
+            recipe_name: Name of the recipe (preferred way to lookup)
+            recipe_path: Path to the recipe file (optional, for direct file access)
 
         Returns:
             Full parsed recipe dictionary or None if not found
+
+        Examples:
+            searcher.get_recipe('西红柿炒鸡蛋')  # Search by name
+            searcher.get_recipe(recipe_path='/path/to/recipe.md')  # Direct path
         """
         if recipe_name and not recipe_path:
             self.build_index()
             if recipe_name in self._index['by_name']:
                 recipe_path = self._index['by_name'][recipe_name]['path']
             else:
-                return None
+                # Fallback to fuzzy search if exact match fails
+                search_results = self.search_by_name(recipe_name)
+                if search_results:
+                    recipe_path = search_results[0]['path']
+                else:
+                    return None
 
         if not recipe_path:
             return None
